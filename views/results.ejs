@@ -1,0 +1,28 @@
+<%- include("partials/header") %>
+
+<h2>Results</h2>
+<ul>
+  <% for(let quote of quotes) { %>
+    <li>"<%= quote.quote %>" — 
+        <a href="#" id="<%= quote.authorId %>"><%= quote.firstName %> <%= quote.lastName %></a>
+    </li>
+  <% } %>
+</ul>
+
+<!-- Bootstrap Modal -->
+<div class="modal fade" id="authorModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5">Author Information</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div id="authorInfo"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="/js/scripts.js"></script>
+<%- include("partials/footer") %>
