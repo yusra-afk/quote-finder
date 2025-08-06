@@ -40,6 +40,7 @@ app.get("/", async (req, res) => {
 app.get("/searchByKeyword", async (req, res) => {
     try {
       const keyword = req.query.keyword;
+      console.log("🔍 Searching for keyword:", keyword);
   
       if (!keyword || keyword.trim() === "") {
         return res.send("Please enter a valid keyword.");
@@ -54,10 +55,12 @@ app.get("/searchByKeyword", async (req, res) => {
         [`%${keyword}%`]
       );
   
+      console.log("✅ Search results:", quotes);
+  
       res.render("quoteList", { quotes });
     } catch (err) {
-      console.error("❌ Keyword search failed:", err.message);
-      res.status(500).send("Internal Server Error");
+      console.error("❌ Error in /searchByKeyword:", err.message);
+      res.status(500).send("Internal Server Error: " + err.message);
     }
   });
 
