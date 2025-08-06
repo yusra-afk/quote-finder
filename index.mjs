@@ -38,18 +38,28 @@ app.get("/", async (req, res) => {
 
 // Search by keyword
 app.get("/searchByKeyword", async (req, res) => {
-  const keyword = req.query.keyword;
-  try {
-    const [results] = await pool.query(
-      `SELECT quote FROM q_quotes WHERE quote LIKE ?`,
-      [`%${keyword}%`]
-    );
-    res.render("results", { results });
-  } catch (err) {
-    console.error("❌ Keyword search failed:", err.message);
-    res.status(500).send("Internal Server Error");
-  }
-});
+    try {
+      const keyword = req.query.keyword;
+  
+      if (!keyword || keyword.trim() === "") {
+        return res.send("Please enter a valid keyword.");
+      }
+  
+      const [quotes] = await pool.query(
+        `SELECT q.quote, a.firstName, a.lastName, c.category 
+         FROM q_quotes q
+         JOIN q_authors a ON q.authorId = a.authorId
+         JOIN q_categories c ON q.categoryId = c.categoryId
+         WHERE q.quote LIKE ?`,
+        [`%${keyword}%`]
+      );
+  
+      res.render("quoteList", { quotes });
+    } catch (err) {
+      console.error("❌ Keyword search failed:", err.message);
+      res.status(500).send("Internal Server Error");
+    }
+  });
 
 // Search by author
 app.get("/searchByAuthor", async (req, res) => {
